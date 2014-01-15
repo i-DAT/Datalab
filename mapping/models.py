@@ -7,6 +7,9 @@ class Install(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Imp(models.Model):
     name = models.CharField(max_length=100)
@@ -17,33 +20,58 @@ class Imp(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Sensor(models.Model):
     name = models.CharField(max_length=100)
-    scale =
+    scale = models.CharField(max_length=100)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Reading(models.Model):
     imp = models.ForeignKey(Imp)
     sensor = models.ForeignKey(Sensor)
-    amount =
+    amount = models.FloatField()
     added = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.imp.name + ':' + self.sensor.name
 
 
 class Device(models.Model):
-    name = models.CharField(max_length=100)
-    serial = 
+    name = models.CharField(max_length=100, blank=True, null=True)
+    serial = models.CharField(max_length=500)
     notes = models.TextField(blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return self.name + ':' + self.serial
+
 
 class Location(models.Model):
-    Device = models.ForeignKey(Device)
+    device = models.ForeignKey(Device)
     lat = models.DecimalField('latitude', max_digits=13, decimal_places=10)
     long = models.DecimalField('longitude', max_digits=13, decimal_places=10)
-    activity = 
-    confidence = 
+    
+    activity_choices = (
+        (0,'IN_VEHICLE'),
+        (1,'ON_BICYCLE'),
+        (2,'ON_FOOT'),
+        (3,'STILL'),
+        (5,'TILTING'),
+        (4,'UNKNOWN')
+    )
+
+    activity = models.IntegerField(choices=activity_choices, blank=True, null=True)
+    confidence = models.IntegerField(blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.device.name
