@@ -16,6 +16,7 @@ mapping_api.register(DeviceResource())
 mapping_api.register(LocationResource())
 
 urlpatterns = patterns('',
+    (r'^$', 'mapping.views.front_page'),
     (r'^api/', include(mapping_api.urls)),
     url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger')),
 
