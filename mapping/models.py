@@ -47,6 +47,7 @@ class Reading(models.Model):
 class Device(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     serial = models.CharField(max_length=500)
+    serial = models.CharField(max_length=500, unique=True)
     notes = models.TextField(blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
