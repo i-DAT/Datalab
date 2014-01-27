@@ -22,5 +22,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
 
+    url(r'^collector/get/', 'mapping.api.collector.collect_get_location'),
     url(r'^collector/', 'mapping.api.collector.collect_location'),
+
 )
