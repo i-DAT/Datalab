@@ -1,5 +1,10 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import paho.mqtt.client as paho
+import json
 
+from settings import broker
 
 class Install(models.Model):
     name = models.CharField(max_length=100)
@@ -46,7 +51,6 @@ class Reading(models.Model):
 
 class Device(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
-    serial = models.CharField(max_length=500)
     serial = models.CharField(max_length=500, unique=True)
     notes = models.TextField(blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True)
@@ -77,3 +81,22 @@ class Location(models.Model):
 
     def __unicode__(self):
         return self.device.serial
+
+
+#TODO - Fix serialisation issues
+@receiver(post_save, sender=Location)
+def new_location(sender, instance, **kwargs):
+
+    client = paho.Client(broker.CLIENT_ID)
+    client.connect(broker.ADDRESS, broker.MQTT_PORT)
+    payload = {
+        'id': instance.device.id,
+        'name': instance.device.name,
+        'lat': str(instance.lat),
+        'long': str(instance.long),
+        'activity': instance.activity,
+        'confidence': instance.confidence,
+        'added': str(instance.added)
+    }
+    client.publish("datalab/map/stream", json.dumps(payload), 1)
+    client.disconnect()
