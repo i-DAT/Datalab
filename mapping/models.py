@@ -53,7 +53,8 @@ class Device(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return self.name + ':' + self.serial
+        #return self.name + ':' + self.serial
+        return self.serial
 
 
 class Location(models.Model):
@@ -75,4 +76,4 @@ class Location(models.Model):
     added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return self.device.name
+        return self.device.serial
