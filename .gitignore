@@ -4,3 +4,5 @@ settings.py
 *.sublime-workspace
 
 *.sublime-project
+
+db.sqlite3
