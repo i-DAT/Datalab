@@ -18,6 +18,7 @@ class Install(models.Model):
 
 class Imp(models.Model):
     name = models.CharField(max_length=100)
+    serial = models.CharField(max_length=500, unique=True)
     install = models.ForeignKey(Install)
     lat = models.DecimalField('latitude', max_digits=13, decimal_places=10)
     long = models.DecimalField('longitude', max_digits=13, decimal_places=10)
@@ -31,7 +32,8 @@ class Imp(models.Model):
 
 class Sensor(models.Model):
     name = models.CharField(max_length=100)
-    scale = models.CharField(max_length=100)
+    #scale = models.CharField(max_length=100)
+    shortcode = models.CharField(max_length=3, blank=True, null=True)
     added = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
