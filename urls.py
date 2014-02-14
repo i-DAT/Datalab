@@ -21,7 +21,8 @@ urlpatterns = patterns('',
     url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger')),
 
     url(r'^admin/', include(admin.site.urls)),
-
+    
+    url(r'^collector/imp/', 'mapping.api.collector.collect_imp_data'),
     url(r'^collector/get/', 'mapping.api.collector.collect_get_location'),
     url(r'^collector/', 'mapping.api.collector.collect_location'),
 
