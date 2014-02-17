@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <style type="text/css">
+
+      #map { height: 500px }
+</style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+
+
+var map;
+
+var mapSocket = new WebSocket("ws://146.185.174.52:8080/datalab/map/stream");
+
+function initialize() {
+
+var map = new google.maps.Map(document.getElementById('map'), {
+zoom: 18,
+center: new google.maps.LatLng(50.375815360963834, -4.13799422359466),
+mapTypeId: google.maps.MapTypeId.ROADMAP
+});
+
+
+
+
+
+
+
+
+
+//// cloud ////////////////////////////////////////////////////////////
+
+var dat_marker = new google.maps.Marker({
+			position: new google.maps.LatLng(50.37573838495583, -4.137854748725886),
+			//animation: google.maps.Animation.DROP,
+           icon: 'cloud.png',
+			map: map,
+			
+		});
+		
+		circleOptions2 = {
+	strokeColor: "#990000",
+	strokeOpacity: 0.1,
+	fillColor: "#990000",
+	fillOpacity: 0.10,
+	map: map,
+	center: new google.maps.LatLng(50.375740, -4.137854),
+	radius: 155
+     
+
+};
+
+
+
+
+var infowindowA = new google.maps.InfoWindow({
+	
+	
+   content: '<iframe src="http://datalab.i-dat.org/admin/" width="500"</iframe>',
+	  
+	  maxHeight: 200
+
+  });
+  
+  google.maps.event.addListener(dat_marker, 'click', function() {
+    infowindowA.open(map,dat_marker);
+  });
+
+ //var circle2 = new google.maps.Circle(circleOptions2);
+ 
+ //////////////////////////////////////////////////////////////////////
+
+//// user /////////////////////////////////////////////////////////////
+
+ var usrlocations = [
+//[9999, 50.37542021613119, -4.137090319156641, 1]
+[1, 50.37542021613119, -4.137090319156641, 1]
+//[6753, 50.376470507265196, -4.138230257987971, 1]
+]; 
+
+var usr_markers = new Array()
+
+function clearMarkers() {
+  for (var i = 0; i < usr_markers.length; i++ ) {
+    usr_markers[i].setMap(null);
+  }
+  usr_markers.length = 0;
+}
+
+ 
+ function users (){
+clearMarkers();
+
+  var infowindow = new google.maps.InfoWindow();
+ 
+var usr_marker, i;
+;
+ 
+for (i = 0; i < usrlocations.length; i++) {
+usr_marker = new google.maps.Marker({
+position: new google.maps.LatLng(usrlocations[i][1], usrlocations[i][2]),
+map: map,
+icon: usrlocations[i][3]+'.png',
+
+});
+ 
+usr_markers.push(usr_marker);
+ 
+google.maps.event.addListener(usr_marker, 'click', (function(usr_marker, i) {
+return function() {
+infowindow.setContent('User: '+usrlocations[i][0].toString()+'<br />\n'+'Lat: '+usrlocations[i][1].toString()+'<br />\n'+'Lon: '+usrlocations[i][2].toString()+'<br />\n'+'Activity; '+usrlocations[i][3].toString());
+infowindow.open(map, usr_marker);
+}
+})(usr_marker, i));
+}
+
+ }
+ 
+ users();
+///////////////////////////////////////////////////////////////////
+
+mapSocket.onmessage = function (event) {
+payload = JSON.parse(event.data);
+console.log(payload);
+//parse the payload and update a map
+if(payload.type == 'location'){
+  var newItem = true;
+  for (var i=0; i < usrlocations.length; i++){
+   if(usrlocations[i][0] == payload.id){
+     //alert('found it ' + payload.id);
+     usrlocations[i][1] = Number(payload.lat);
+     usrlocations[i][2] = Number(payload.long);
+     usrlocations[i][3] = payload.activity;
+     newItem = false;
+   }
+  }
+  if (newItem == true){
+   usrlocations.push([payload.id,payload.lat,payload.long,payload.activity]);
+  }
+
+  console.log(usrlocations);
+  users();
+}else if (payload.type == 'imp'){
+  console.log('got imp data');
+}
+};
+//// imps //////////////////////////////////////////////////////////
+
+var implocations = [
+[2345, 50.37590773200852, -4.137087636947626, 155]
+];
+
+var infowindow2 = new google.maps.InfoWindow();
+ 
+var imp_marker, i;
+var imp_markers = new Array();
+var circleOptions;
+var circle;
+ 
+for (i = 0; i < implocations.length; i++) {
+imp_marker = new google.maps.Marker({
+position: new google.maps.LatLng(implocations[i][1], implocations[i][2]),
+map: map,
+icon: 'imp.png',
+
+});
+ 
+imp_markers.push(imp_marker);
+
+google.maps.event.addListener(imp_marker, 'click', (function(imp_marker, i) {
+return function() {
+infowindow2.setContent('Imp: '+implocations[i][0].toString()+'<br />\n'+'Lat: '+implocations[i][1].toString()+'<br />\n'+'Lon: '+implocations[i][2].toString()+'<br />\n'+'Activity; '+implocations[i][3].toString());
+infowindow2.open(map, imp_marker);
+}
+})(imp_marker, i));
+}
+
+////////////////////////////////////////////////////////////////////
+
+
+
+//// geofences ///////////////////////////////////////////////////////
+
+var fencelocations = [
+['poem', 50.37616260673608, -4.1373344001769965, 40]
+];
+
+
+var infowindow3 = new google.maps.InfoWindow();
+ 
+var fence_marker, i;
+var fence_markers = new Array();
+var circleOptions;
+var circle;
+ 
+for (i = 0; i < fencelocations.length; i++) {
+fence_marker = new google.maps.Marker({
+position: new google.maps.LatLng(fencelocations[i][1], fencelocations[i][2]),
+map: map,
+icon: 'fence.png',
+
+});
+ 
+
+circleOptions = {
+	strokeColor: "#000000",
+	strokeOpacity: 1,
+	fillColor: "#990000",
+	fillOpacity: 0.15,
+	map: map,
+	center: new google.maps.LatLng(fencelocations[i][1], fencelocations[i][2]),
+	radius: fencelocations[i][3]
+     
+
+};
+var ccc = 'https://dl.dropboxusercontent.com/u/84159085/How%20to%20use%20the%20Public%20folder.txt';
+fence_markers.push(fence_marker);
+
+circle = new google.maps.Circle(circleOptions);
+
+var infowindowB = new google.maps.InfoWindow({
+      content: ccc,
+	 
+
+  });
+
+google.maps.event.addListener(fence_marker, 'click', (function(fence_marker, i) {
+return function() {
+infowindowB.open(map,fence_marker);
+}
+})(fence_marker, i));
+}
+
+///////////////////////////////////////////////////////////////
+
+
+
+//// i-dat /////////////////////////////////////////////////////
+
+  var imageBounds = new google.maps.LatLngBounds(
+     new google.maps.LatLng(50.37528336866855, -4.138249033451075),
+    new google.maps.LatLng(50.375929969455335, -4.137666994094843)
+	);
+
+  var historicalOverlay = new google.maps.GroundOverlay(
+      //'https://dl.dropboxusercontent.com/u/84159085/20120802_151526.jpg',
+	  'dat.png',
+      imageBounds);
+  historicalOverlay.setMap(map);
+
+//////////////////////////////////////////////////////////////////////
+
+
+
+
+
+}
+
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+   
+  </body>
+</html>
+
+
