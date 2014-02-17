@@ -90,30 +90,25 @@ def collect_imp_data(request):
     print request.GET
     if request.GET.get("api_key"):
 
-        try:
-            key = ApiKey.objects.get(key=request.GET.get('api_key'))
+        key = ApiKey.objects.get(key=request.GET.get('api_key'))
 
-            the_imp = Imp.objects.get(
-                serial=request.GET.get('serial')
-            )
+        the_imp = Imp.objects.get(
+            serial=request.GET.get('serial')
+        )
 
-            the_sensor = Sensor.objects.get(
-                shortcode = request.GET.get('sensor')
-            )
+        the_sensor = Sensor.objects.get(
+            shortcode = request.GET.get('sensor')
+        )
 
-            the_reading = Reading()
-            the_reading.imp = the_imp
-            the_reading.sensor = the_sensor
-            the_reading.amount = request.GET.get('value')
+        the_reading = Reading()
+        the_reading.imp = the_imp
+        the_reading.sensor = the_sensor
+        the_reading.amount = request.GET.get('value')
 
-            the_reading.save()
+        the_reading.save()
 
-            success = True
+        success = True
 
-        except Exception as e:
-            print e
-            print traceback.format_exception(*sys.exc_info())
-            raise
 
     return render_to_response('success.json', {
         'success': success,
