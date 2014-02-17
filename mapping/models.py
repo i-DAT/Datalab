@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 import paho.mqtt.client as paho
 import json
@@ -105,7 +105,7 @@ def new_location(sender, instance, **kwargs):
     client.disconnect()
 
 
-@receiver(post_save, sender=Reading)
+@receiver(pre_save, sender=Reading)
 def new_reading(sender, instance, **kwargs):
 
     client = paho.Client(broker.CLIENT_ID)
