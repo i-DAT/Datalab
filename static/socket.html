@@ -80,6 +80,12 @@ var infowindowA = new google.maps.InfoWindow({
 //[6753, 50.376470507265196, -4.138230257987971, 1]
 ]; 
 
+var implocations = [
+[2345, 50.37590773200852, -4.137087636947626, 155]
+];
+
+var infowindow2 = new google.maps.InfoWindow();
+
 var usr_markers = new Array()
 
 function clearMarkers() {
@@ -143,16 +149,17 @@ if(payload.type == 'location'){
   console.log(usrlocations);
   users();
 }else if (payload.type == 'imp'){
-  console.log('got imp data');
+  //console.log('got imp data');
+  var i = 0;
+  implocations[i][3] = payload.amount;
+  infowindow2.setContent('Imp: '+implocations[i][0].toString()+'<br />\n'+'Lat: '+implocations[i][1].toString()+'<br />\n'+'Lon: '+implocations[i][2].toString()+'<br />\n'+'Activity; '+implocations[i][3].toString());
 }
 };
 //// imps //////////////////////////////////////////////////////////
 
-var implocations = [
-[2345, 50.37590773200852, -4.137087636947626, 155]
-];
 
-var infowindow2 = new google.maps.InfoWindow();
+
+
  
 var imp_marker, i;
 var imp_markers = new Array();
