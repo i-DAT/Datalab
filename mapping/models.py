@@ -103,3 +103,22 @@ def new_location(sender, instance, **kwargs):
     }
     client.publish("datalab/map/stream", json.dumps(payload), 1)
     client.disconnect()
+
+
+@receiver(post_save, sender=Reading)
+def new_reading(sender, instance, **kwargs):
+
+    client = paho.Client(broker.CLIENT_ID)
+    client.connect(broker.ADDRESS, broker.MQTT_PORT)
+    payload = {
+        'id': instance.imp.id,
+        'serial': instance.imp.serial,
+        'lat': str(instance.imp.lat),
+        'long': str(instance.imp.long),
+        'shortcode': instance.sensor.shortcode,
+        'amount': instance.amount,
+        'added': str(instance.added),
+        'type': 'imp'
+    }
+    client.publish("datalab/map/stream", json.dumps(payload), 1)
+    client.disconnect()
