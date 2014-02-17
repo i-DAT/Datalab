@@ -98,7 +98,8 @@ def new_location(sender, instance, **kwargs):
         'long': str(instance.long),
         'activity': instance.activity,
         'confidence': instance.confidence,
-        'added': str(instance.added)
+        'added': str(instance.added),
+        'type': 'location'
     }
     client.publish("datalab/map/stream", json.dumps(payload), 1)
     client.disconnect()
