@@ -2,22 +2,27 @@ from django.conf.urls import patterns, include, url
 
 from mapping.api.resources import *
 
+from perception.api.resources import *
+
 from tastypie.api import Api
 
 from django.contrib import admin
 admin.autodiscover()
 
-mapping_api = Api(api_name='mapping')
-mapping_api.register(InstallResource())
-mapping_api.register(ImpResource())
-mapping_api.register(SensorResource())
-mapping_api.register(ReadingResource())
-mapping_api.register(DeviceResource())
-mapping_api.register(LocationResource())
+v1_api = Api(api_name='v1')
+v1_api.register(InstallResource())
+v1_api.register(ImpResource())
+v1_api.register(SensorResource())
+v1_api.register(ReadingResource())
+v1_api.register(DeviceResource())
+v1_api.register(LocationResource())
+v1_api.register(CameraResource())
+v1_api.register(VolumeResource())
+v1_api.register(MotionResource())
 
 urlpatterns = patterns('',
     (r'^$', 'mapping.views.front_page'),
-    (r'^api/', include(mapping_api.urls)),
+    (r'^api/', include(v1_api.urls)),
     url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger')),
 
     url(r'^admin/', include(admin.site.urls)),
