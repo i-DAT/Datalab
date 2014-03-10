@@ -1,6 +1,8 @@
 from django.contrib import admin
 from models import *
 
+from core.actions import export_as_xls
+
 admin.site.register(Camera)
 
 
