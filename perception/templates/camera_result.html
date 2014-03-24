@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Camera Result | i-DAT.org</title>
+    <script src="{{STATIC_URL}}js/processing-1.4.1.min.js"></script>
+</head>
+<body>
+    <canvas id="processing-canvas"></canvas>
+
+<script type="text/processing" data-processing-target="processing-canvas">
+/* @pjs preload="http://127.0.0.1:8000{{STATIC_URL}}cam{{camera}}.jpg"; */
+
+PImage cam;
+
+void setup() {
+
+  cam = loadImage("http://127.0.0.1:8000{{STATIC_URL}}cam{{camera}}.jpg");
+
+  //noLoop();
+  width = 320;
+  height = 240;
+
+}
+
+
+
+void draw() {
+
+  background(255);
+  image(cam, 0, 0);
+  stroke(204, 102, 0);
+  {% for point in point_list %}
+      point({{point.x}}, {{point.y}});
+  {% endfor %}
+
+  noLoop();
+
+}
+
+</script>
+</body>
+</html>
