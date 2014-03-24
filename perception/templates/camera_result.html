@@ -7,13 +7,13 @@
     <canvas id="processing-canvas"></canvas>
 
 <script type="text/processing" data-processing-target="processing-canvas">
-/* @pjs preload="http://127.0.0.1:8000{{STATIC_URL}}cam{{camera}}.jpg"; */
+/* @pjs preload="{{STATIC_URL}}cam{{camera}}.jpg"; */
 
 PImage cam;
 
 void setup() {
 
-  cam = loadImage("http://127.0.0.1:8000{{STATIC_URL}}cam{{camera}}.jpg");
+  cam = loadImage("{{STATIC_URL}}cam{{camera}}.jpg");
 
   //noLoop();
   width = 320;
