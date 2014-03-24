@@ -9,7 +9,7 @@ from perception.models import *
 
 def motion_result(request, camera=1):
     point_list = Motion.objects.filter(camera__id=camera)
-    point_list = point_list.filter(added__range=["2014-03-03", "2011-03-10"])
+    point_list = point_list.filter(added__range=["2014-03-03", "2014-03-10"])
     return render_to_response('camera_result.html', {
         'point_list': point_list,
         'camera': camera
