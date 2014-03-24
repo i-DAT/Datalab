@@ -16,8 +16,8 @@ void setup() {
   cam = loadImage("{{STATIC_URL}}cam{{camera}}.jpg");
 
   //noLoop();
-  width = 320;
-  height = 240;
+  width = 320 * 4;
+  height = 240 * 4;
 
 }
 
@@ -26,10 +26,11 @@ void setup() {
 void draw() {
 
   background(255);
-  image(cam, 0, 0);
+  image(cam, 0, 0, 320 * 4, 240 * 4);
   stroke(204, 102, 0);
+  strokeWeight(4);
   {% for point in point_list %}
-      point({{point.x}}, {{point.y}});
+      point({{point.x}} * 4, {{point.y}} * 4);
   {% endfor %}
 
   noLoop();
