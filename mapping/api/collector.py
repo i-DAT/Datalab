@@ -114,7 +114,7 @@ def collect_imp_data(request):
 
         key = ApiKey.objects.get(key=request.GET.get('api_key'))
 
-        the_imp = Imp.objects.get(
+        the_imp, created = Imp.objects.get_or_create(
             serial=request.GET.get('serial')
         )
 
