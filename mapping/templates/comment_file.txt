@@ -1,0 +1,3 @@
+{% for comment in comment_list %}
+    {{comment.text}}
+{% endfor%}

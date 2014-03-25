@@ -32,6 +32,8 @@ urlpatterns = patterns('',
     url(r'^collector/comment/', 'mapping.api.collector.collect_comment'),
     url(r'^collector/', 'mapping.api.collector.collect_location'),
 
+    url(r'^comment/file/', 'mapping.views.return_comment_file'),
+
     url(r'^perception/result/camera/(?P<camera>\d+)', 'perception.views.motion_result'),
     url(r'^perception/result/camera/', 'perception.views.motion_result'),
 
