@@ -105,7 +105,7 @@ def new_location(sender, instance, **kwargs):
     client.disconnect()
 
 
-@receiver(pre_save, sender=Reading)
+#@receiver(pre_save, sender=Reading)
 def new_reading(sender, instance, **kwargs):
 
     client = paho.Client(broker.CLIENT_ID)
