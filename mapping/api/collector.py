@@ -77,6 +77,34 @@ def collect_get_location(request):
     }, context_instance=RequestContext(request))
 
 
+def collect_comment(request):
+    success = False
+    
+    #check for a key
+    print request.GET
+    if request.GET.get("api_key"):
+
+        key = ApiKey.objects.get(key=request.GET.get('api_key'))
+
+        if request.GET.get("api_key"):
+
+            the_device, created = Device.objects.get_or_create(
+                serial=request.GET.get('serial')
+            )
+
+            the_comment = Comment()
+            the_comment.device = the_device
+            the_comment.text = request.GET.get('com')
+
+            the_comment.save()
+
+            success = True
+
+    return render_to_response('success.json', {
+        'success': success,
+    }, context_instance=RequestContext(request))
+
+
 def collect_imp_data(request):
     success = False
     

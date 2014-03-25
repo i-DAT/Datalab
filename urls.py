@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     
     url(r'^collector/imp/', 'mapping.api.collector.collect_imp_data'),
     url(r'^collector/get/', 'mapping.api.collector.collect_get_location'),
+    url(r'^collector/comment/', 'mapping.api.collector.collect_comment'),
     url(r'^collector/', 'mapping.api.collector.collect_location'),
 
     url(r'^perception/result/camera/(?P<camera>\d+)', 'perception.views.motion_result'),
