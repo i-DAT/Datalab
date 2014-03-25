@@ -55,28 +55,22 @@ def collect_get_location(request):
     print request.GET
     if request.GET.get("api_key"):
 
-        try:
-            key = ApiKey.objects.get(key=request.GET.get('api_key'))
+        key = ApiKey.objects.get(key=request.GET.get('api_key'))
 
-            the_device, created = Device.objects.get_or_create(
-                serial=request.GET.get('serial')
-            )
+        the_device, created = Device.objects.get_or_create(
+            serial=request.GET.get('serial')
+        )
 
-            the_location = Location()
-            the_location.device = the_device
-            the_location.lat = request.GET.get('lat')
-            the_location.long = request.GET.get('long')
-            the_location.activity = request.GET.get('act')
-            the_location.confidence = request.GET.get('conf')
+        the_location = Location()
+        the_location.device = the_device
+        the_location.lat = request.GET.get('lat')
+        the_location.long = request.GET.get('long')
+        the_location.activity = request.GET.get('act')
+        the_location.confidence = request.GET.get('conf')
 
-            the_location.save()
+        the_location.save()
 
-            success = True
-
-        except Exception as e:
-            print e
-            print traceback.format_exception(*sys.exc_info())
-            raise
+        success = True
 
     return render_to_response('success.json', {
         'success': success,
