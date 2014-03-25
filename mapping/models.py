@@ -63,6 +63,15 @@ class Device(models.Model):
         return self.serial
 
 
+class Comment(models.Model):
+    text = models.TextField(blank=True, null=True)
+    added = models.DateTimeField(auto_now_add=True)
+    device = models.ForeignKey(Device)
+
+    def __unicode__(self):
+        return str(self.added)
+
+
 class Location(models.Model):
     device = models.ForeignKey(Device)
     lat = models.DecimalField('latitude', max_digits=13, decimal_places=10)
