@@ -34,6 +34,9 @@ urlpatterns = patterns('',
 
     url(r'^comment/file/', 'mapping.views.return_comment_file'),
 
+    url(r'^nepal/data/(?P<year>\d+).json', 'nepal.views.render_motion_chart_json'),
+    #url(r'^nepal/data/', 'nepal.views.render_motion_chart_json'),
+
     url(r'^perception/result/camera/(?P<camera>\d+)', 'perception.views.motion_result'),
     url(r'^perception/result/camera/', 'perception.views.motion_result'),
 

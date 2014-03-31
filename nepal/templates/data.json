@@ -1,0 +1,20 @@
+{
+     "cols": [
+     	{"label":"District","type":"string"},
+        {"label":"GPI","type":"number"},
+      	{"label":"NER","type":"number"},
+      	{"label":"Section","type":"string"},
+        {"label":"Population","type":"number"},
+        {"label":"Region","type":"string"},
+        {"label":"Zone","type":"string"},
+        {"label":"Development Region","type":"string"},
+        {"label":"Area","type":"number"},
+        {"label":"Code","type":"number"},
+        {"label":"Eco Zone","type":"string"}
+      ],
+      "rows" : [
+        {%for item in data_list %}
+        {"c":[{"v": "{{item.district}}"},{"v": {{item.gpi}}}, {"v": {{item.ner}}},{"v": "{{item.section}}"},{"v": "{{item.region}}"},{"v": "{{item.zone}}"},{"v": "{{item.developmentregion}}"},{"v": {{item.area}}},{"v": {{item.code}}},{"v": "{{item.ecozone}}"}]}{%if not forloop.last%},{%endif%}
+        {% endfor %}
+        ]
+}
