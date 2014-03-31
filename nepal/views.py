@@ -28,6 +28,6 @@ def render_motion_chart_json(request, year='2003'):
 
     #print output
 
-    return render_to_response('data.json', {
+    return render_to_response('nepal_data.json', {
         'data_list': output
     }, context_instance=RequestContext(request))
