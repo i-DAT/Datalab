@@ -10,6 +10,9 @@ from tastypie.models import ApiKey
 
 import json
 
+import paho.mqtt.client as paho
+from settings import broker
+
 
 #custom method for collecting gps data
 @csrf_exempt
@@ -112,25 +115,29 @@ def collect_imp_data(request):
     print request.GET
     if request.GET.get("api_key"):
 
-        key = ApiKey.objects.get(key=request.GET.get('api_key'))
+        #key = ApiKey.objects.get(key=request.GET.get('api_key'))
 
-        the_imp, created = Imp.objects.get_or_create(
-            serial=request.GET.get('serial')
-        )
+        #the_imp, created = Imp.objects.get_or_create(
+        #    serial=request.GET.get('serial')
+        #)
 
-        the_sensor = Sensor.objects.get(
-            shortcode = request.GET.get('sensor')
-        )
+        #the_sensor = Sensor.objects.get(
+        #    shortcode = request.GET.get('sensor')
+        #)
 
-        the_reading = Reading()
-        the_reading.imp = the_imp
-        the_reading.sensor = the_sensor
-        the_reading.amount = request.GET.get('value')
+        #the_reading = Reading()
+        #the_reading.imp = the_imp
+        #the_reading.sensor = the_sensor
+        #the_reading.amount = request.GET.get('value')
 
-        the_reading.save()
+        #the_reading.save()
 
-        success = True
+        #success = True
 
+        client = paho.Client(broker.CLIENT_ID)
+        client.connect(broker.ADDRESS, broker.MQTT_PORT)
+        client.publish("datalab/imp/" + request.GET.get('serial') + "/" + request.GET.get('sensor'), request.GET.get('value'), 1)
+        client.disconnect()
 
     return render_to_response('success.json', {
         'success': success,
