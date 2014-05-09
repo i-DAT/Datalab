@@ -108,6 +108,18 @@ def collect_comment(request):
     }, context_instance=RequestContext(request))
 
 
+def collect_number(request):
+    success = False
+    
+    #check for a key
+    print request.GET
+    if request.GET.get("api_key"):
+        client = paho.Client(broker.CLIENT_ID)
+        client.connect(broker.ADDRESS, broker.MQTT_PORT)
+        client.publish("datalab/telephone/", str(request.GET.get('value')), 1)
+        client.disconnect()
+
+
 def collect_imp_data(request):
     success = False
     
