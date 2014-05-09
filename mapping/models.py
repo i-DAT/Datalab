@@ -120,7 +120,7 @@ def new_reading(sender, instance, **kwargs):
     client = paho.Client(broker.CLIENT_ID)
     client.connect(broker.ADDRESS, broker.MQTT_PORT)
 
-    client.publish("datalab/imp/" + instance.imp.serial + "/" + instance.sensor.shortcode, instance.amount, 1)
+    client.publish("datalab/imp/" + instance.imp.serial + "/" + instance.sensor.shortcode, str(instance.amount), 1)
 
     payload = {
         'id': instance.imp.id,
