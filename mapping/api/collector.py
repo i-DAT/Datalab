@@ -136,7 +136,7 @@ def collect_imp_data(request):
 
         client = paho.Client(broker.CLIENT_ID)
         client.connect(broker.ADDRESS, broker.MQTT_PORT)
-        client.publish("datalab/imp/" + request.GET.get('serial') + "/" + request.GET.get('sensor'), request.GET.get('value'), 1)
+        client.publish("datalab/imp/" + request.GET.get('serial') + "/" + request.GET.get('sensor'), str(request.GET.get('value')), 1)
         client.disconnect()
 
     return render_to_response('success.json', {
