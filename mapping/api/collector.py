@@ -118,6 +118,11 @@ def collect_number(request):
         client.connect(broker.ADDRESS, broker.MQTT_PORT)
         client.publish("datalab/telephone/", str(request.GET.get('value')), 1)
         client.disconnect()
+        success = True
+
+    return render_to_response('success.json', {
+        'success': success,
+    }, context_instance=RequestContext(request))
 
 
 def collect_imp_data(request):
@@ -150,6 +155,7 @@ def collect_imp_data(request):
         client.connect(broker.ADDRESS, broker.MQTT_PORT)
         client.publish("datalab/imp/" + request.GET.get('serial') + "/" + request.GET.get('sensor'), str(request.GET.get('value')), 1)
         client.disconnect()
+        success = True
 
     return render_to_response('success.json', {
         'success': success,
