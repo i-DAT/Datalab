@@ -146,6 +146,25 @@ def collect_serial(request):
         'success': success,
     }, context_instance=RequestContext(request))
 
+def collect_serial_number(request):
+    print request.GET
+    if request.GET.get("api_key"):
+        client = paho.Client(broker.CLIENT_ID+"-collector")
+        client.connect(broker.ADDRESS, broker.MQTT_PORT)
+
+        data = {
+            'number':request.GET.get('value'),
+            'serial':request.GET.get('serial')
+        }
+
+        client.publish("datalab/telephone/collector/", json.dumps(data), 1)
+        client.disconnect()
+        success = True
+
+    return render_to_response('success.json', {
+        'success': success,
+    }, context_instance=RequestContext(request))
+
 
 def collect_imp_data(request):
     success = False
