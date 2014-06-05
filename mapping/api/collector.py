@@ -114,9 +114,9 @@ def collect_number(request):
     #check for a key
     print request.GET
     if request.GET.get("api_key"):
-        client = paho.Client(broker.CLIENT_ID)
+        client = paho.Client(broker.CLIENT_ID+"-collector")
         client.connect(broker.ADDRESS, broker.MQTT_PORT)
-        client.publish("datalab/telephone/", str(request.GET.get('value')), 1)
+        client.publish("datalab/telephone/collector/", str(request.GET.get('value')), 1)
         client.disconnect()
         success = True
 
@@ -131,6 +131,11 @@ def collect_serial(request):
     #check for a key
     print request.GET
     if request.GET.get("api_key"):
+        client = paho.Client(broker.CLIENT_ID+"-serial")
+        client.connect(broker.ADDRESS, broker.MQTT_PORT)
+        client.publish("datalab/telephone/serial/", str(request.GET.get('value')), 1)
+        client.disconnect()
+        success = True
         
         the_device = Device()
         the_device.serial = str(request.GET.get('serial'))
@@ -140,6 +145,7 @@ def collect_serial(request):
     return render_to_response('success.json', {
         'success': success,
     }, context_instance=RequestContext(request))
+
 
 def collect_imp_data(request):
     success = False
