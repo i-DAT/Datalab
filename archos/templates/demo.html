@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Arch-OS Demo | Datalab</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+     <style>
+        body { padding-top: 70px;}
+        .stream-image{width: 90%;}
+        .overlay{list-style-type:none; color: white; position: absolute; top: 150px; }
+    </style>
+   
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">Arch-OS Demo</a>
+            </div>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="glyphicon glyphicon-align-justify"></span> {{page_menu}}</button>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-left">
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+                    <!--<li><p class="navbar-text">Download the Cheltenham Festivals App:</p></li>
+                    <li><a href="https://itunes.apple.com/gb/app/qualia/id710606097?mt=8&uo=4">App Store</a></li>
+                    <li><a href="https://play.google.com/store/apps/details?id=com.elixel.qualia">Google Play</a></li>-->
+                </ul>
+          
+        </div>
+        </div>
+    </nav>
+        
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4">
+                <h3>Live Image</h3>
+                <img class="stream-image" src="http://141.163.172.106:8080/shot.jpg">
+            </div>
+            <div class="col-xs-4">
+                <h3>Live Data</h3>
+                    <ul>
+                        <li><a href="">WindVane</a><br><span class="WindVane">220.58</span></li>
+                        <li><a href="">WindSpeed</a><br><span class="WindSpeed">0.7</span></li>
+                        <li><a href="">TempGrdBlockC</a><br><span class="TempGrdBlockC">18.54</span></li>
+                        <li><a href="">TempGrdBlockB</a><br><span class="TempGrdBlockB">20.38</span></li>
+                        <li><a href="">TempGrdBlockA</a><br><span class="TempGrdBlockA">21.38</span></li>
+                    </ul>
+            </div>
+            <div class="col-xs-4">
+                <h3>Combined</h3>
+                <img class="stream-image" src="http://141.163.172.106:8080/shot.jpg">
+                <ul class="overlay">
+                        <li>WindVane <span class="WindVane">220.58</span></li>
+                        <li>WindSpeed <span class="WindSpeed">0.7</span></li>
+                        <li>TempGrdBlockC <span class="TempGrdBlockC">18.54</span></li>
+                        <li>TempGrdBlockB <span class="TempGrdBlockB">20.38</span></li>
+                        <li>TempGrdBlockA <span class="TempGrdBlockA">21.38</span></li>
+                </ul>
+
+            </div>
+            
+            
+        </div>
+        <div class="row">
+            <div class="col-xs-12"><h3>Chart</h3>
+                <div id="chart_div" style=" height: 300px; width: 900px;"></div>
+            </div>
+        </div>
+            
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+     <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    $(function() {
+    
+    
+    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+
+    var tid = setInterval(refresh_img, 2000);
+
+    var data = google.visualization.arrayToDataTable([
+          ['Date/Time', 'Block C', 'Block B', 'Block A'],
+          [new Date(),parseFloat($('.TempGrdBlockC').html()),parseFloat($('.TempGrdBlockB').html()),parseFloat($('.TempGrdBlockA').html())]
+        ]);
+
+    var options = {
+          curveType: 'function',
+          animation:{
+            duration: 1000,
+            easing: 'linear',
+        },
+        };
+
+
+    function refresh_img() {
+        $('.stream-image').attr('src', $('.stream-image').attr('src')+'?'+Math.random());
+        update_data('WindVane',0.1,2);
+        update_data('WindSpeed',0.1,2);
+        update_data('TempGrdBlockC',0.1,2);
+        update_data('TempGrdBlockB',0.1,2);
+        update_data('TempGrdBlockA',0.1,2);
+        data.addRows([
+            [new Date(),parseFloat($('.TempGrdBlockC').html()),parseFloat($('.TempGrdBlockB').html()),parseFloat($('.TempGrdBlockA').html())]
+        ]);
+        chart.draw(data, options);
+    };
+
+    function update_data(id,variance,points){
+        var val = parseFloat($('.'+id).html());
+        var vary = (Math.random() * ( (variance*-1) - variance) + variance);
+        val = (val + vary).toFixed(points);
+        $('.'+id).html(val);
+    };
+
+
+    
+      
+      function drawChart() {
+
+        chart.draw(data, options);
+      };
+
+      google.setOnLoadCallback(drawChart);
+
+
+  });
+
+    </script>
+    
+ 
+  </body>
+</html>

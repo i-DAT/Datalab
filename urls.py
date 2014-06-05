@@ -27,6 +27,7 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     
+    url(r'^collector/device/', 'mapping.api.collector.collect_serial'),
     url(r'^collector/telephone/', 'mapping.api.collector.collect_number'),
     url(r'^collector/imp/', 'mapping.api.collector.collect_imp_data'),
     url(r'^collector/get/', 'mapping.api.collector.collect_get_location'),
@@ -34,6 +35,8 @@ urlpatterns = patterns('',
     url(r'^collector/', 'mapping.api.collector.collect_location'),
 
     url(r'^comment/file/', 'mapping.views.return_comment_file'),
+
+    url(r'^archos/demo/', 'archos.views.render_demo_page'),
 
     url(r'^nepal/data/(?P<year>\d+).json', 'nepal.views.render_motion_chart_json'),
     #url(r'^nepal/data/', 'nepal.views.render_motion_chart_json'),

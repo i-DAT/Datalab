@@ -125,6 +125,22 @@ def collect_number(request):
     }, context_instance=RequestContext(request))
 
 
+def collect_serial(request):
+    success = False
+    
+    #check for a key
+    print request.GET
+    if request.GET.get("api_key"):
+        
+        the_device = Device()
+        the_device.serial = str(request.GET.get('serial'))
+        the_device.save()
+        success = True
+
+    return render_to_response('success.json', {
+        'success': success,
+    }, context_instance=RequestContext(request))
+
 def collect_imp_data(request):
     success = False
     
